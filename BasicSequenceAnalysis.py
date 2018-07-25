@@ -118,4 +118,40 @@ def get_base_qual_hist(quality_strings):
     return hist, qualities
 
 
+def get_gc_content(reads_list):
+    """ Get the GC Content at each position of the provided reads. """
+    # Get the length of the longest string 
+    # from the list of strings.
+    mx_len = max(reads_list, key=len)
+    mx_len = len(mx_len)
+
+    gc_count = [0] * mx_len
+    total = [0] * mx_len
+    gc_percent = []
+    
+    for read in reads_list:
+        for i, _ in enumerate(read):
+            if read[i] == 'C' or read[i] == 'G':
+                gc_count[i] += 1
+            total[i] += 1
+    
+    for i, _ in enumerate(gc_count):
+        if total[i] > 0:
+            gc_p = gc_count[i] / float(total[i])
+            gc_percent.append(gc_p)
+    return gc_percent
+
+
+def plot_quality_gc(histo, gc_percent):
+    """ Generate a plot of Base Quality Histogram and
+    GC Content Distribution. """
+    fig, (ax_a, ax_b) = plt.subplots(nrows=2, figsize=(5, 8))
+    ax_a.plot(range(len(histo)), histo, color='green')
+    ax_a.set_title('Base Quality Histogram')
+    ax_b.plot(range(len(gc_percent)), gc_percent, color='red')
+    ax_b.set_title('GC Content Distribution')
+    plt.tight_layout()
+    plt.savefig("BaseQual_GCContent.pdf")
+
+
 
