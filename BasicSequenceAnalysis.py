@@ -153,5 +153,3 @@ def plot_quality_gc(histo, gc_percent):
     plt.tight_layout()
     plt.savefig("BaseQual_GCContent.pdf")
 
-
-
