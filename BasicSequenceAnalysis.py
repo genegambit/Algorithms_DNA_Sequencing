@@ -71,4 +71,26 @@ def count_bases(in_genome):
     print(counts)
 
 
+def read_fastq(in_file):
+    """ Read the Fastq file provided as an input 
+    and return lists of the sequences and qualities."""
+    seqs = []
+    qual = []
+    with open(in_file) as infile:
+        while True:
+            # Skip the header line containing the name.
+            infile.readline()
+            # Read the Sequence to the variable a_sq
+            a_sq = infile.readline().rstrip() 
+            # Skip the placeholder line.
+            infile.readline() 
+            # Read the Base Quality line.
+            a_ql = infile.readline().rstrip()            
+            if not a_sq:
+                break
+            seqs.append(a_sq)
+            qual.append(a_ql)
+    return seqs, qual
+
+
 
