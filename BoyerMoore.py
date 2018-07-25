@@ -126,3 +126,43 @@ def dense_bad_char_tab(p, amap):
     return tab
 
 
+class BoyerMoore(object):
+
+    """ Implementation of the Boyer-Moore preprocessing. """
+    
+    def __init__(self, p, alphabet='ACGT'):
+        self.p = p
+        self.alphabet = alphabet
+        # Create map from alphabet characters to integers
+        self.amap = {}
+        for i in range(len(self.alphabet)):
+            self.amap[self.alphabet[i]] = i
+        # Make bad character rule table
+        self.bad_char = dense_bad_char_tab(p, self.amap)
+        # Create good suffix rule table
+        _, self.big_l, self.small_l_prime = good_suffix_table(p)
+    
+    def bad_character_rule(self, i, c):
+        """ Return # skips given by bad character rule at offset i """
+        assert c in self.amap
+        ci = self.amap[c]
+        assert i > (self.bad_char[i][ci]-1)
+        return i - (self.bad_char[i][ci]-1)
+    
+    def good_suffix_rule(self, i):
+        """ Given a mismatch at offset i, return amount to shift
+            as determined by (weak) good suffix rule. """
+        length = len(self.big_l)
+        assert i < length
+        if i == length - 1:
+            return 0
+        i += 1  # i points to leftmost matching position of P
+        if self.big_l[i] > 0:
+            return length - self.big_l[i]
+        return length - self.small_l_prime[i]
+    
+    def match_skip(self):
+        """ Return amount to shift in case where P matches T """
+        return len(self.small_l_prime) - self.small_l_prime[1]
+
+
