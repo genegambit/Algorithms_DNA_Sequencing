@@ -39,11 +39,24 @@ def check_match(s_1, s_2):
 
 
 def reverse_complement(inseq):
-    """ Return the reverse complement of a given DNA Sequence."""
+    """ Return the reverse complement of a given DNA Sequence.
+    The input is the sequence string. """
     complement_dict = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
     rev_comp = ""
     for base in inseq:
         rev_comp = complement_dict[base] + rev_comp
     return rev_comp
+
+
+def read_genome(fileloc):
+    """ This function reads a genome file.
+    The input is the location of the file. """
+    with open(fileloc) as infile:
+        genome = ""
+        for line in infile:
+            # Skip the first line with genome information.
+            if not line[0] == ">":
+                genome += line.rstrip()
+    return genome
 
 
