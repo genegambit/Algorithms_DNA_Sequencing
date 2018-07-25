@@ -86,4 +86,43 @@ def small_l_prime_array(n):
     return small_lp
 
 
+def good_suffix_table(p):
+    """ Return tables needed to apply good suffix rule. """
+    n = n_array(p)
+    lp = big_l_prime_array(p, n)
+    return lp, big_l_array(p, lp), small_l_prime_array(n)
+
+
+def good_suffix_mismatch(i, big_l_prime, small_l_prime):
+    """ Given a mismatch at offset i, and given L/L' and l' arrays,
+        return amount to shift as determined by good suffix rule. """
+    length = len(big_l_prime)
+    assert i < length
+    if i == length - 1:
+        return 0
+    i += 1  # i points to leftmost matching position of P
+    if big_l_prime[i] > 0:
+        return length - big_l_prime[i]
+    return length - small_l_prime[i]
+
+
+def good_suffix_match(small_l_prime):
+    """ Given a full match of P to T, return amount to shift as
+        determined by good suffix rule. """
+    return len(small_l_prime) - small_l_prime[1]
+
+
+def dense_bad_char_tab(p, amap):
+    """ Given pattern string and list with ordered alphabet characters, create
+        and return a dense bad character table.  Table is indexed by offset
+        then by character. """
+    tab = []
+    nxt = [0] * len(amap)
+    for i in range(0, len(p)):
+        c = p[i]
+        assert c in amap
+        tab.append(nxt[:])
+        nxt[amap[c]] = i+1
+    return tab
+
 
