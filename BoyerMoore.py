@@ -166,3 +166,25 @@ class BoyerMoore(object):
         return len(self.small_l_prime) - self.small_l_prime[1]
 
 
+def boyer_moore_implementation(p, p_bm, t):
+    """ Function that takes the pattern, the preprocessing done by using boyer moore and the text.
+    Returns the occurrences for the matches. """
+    i = 0
+    occurrences = []
+    while i < len(t) - len(p) + 1:
+        shift = 1
+        mismatched = False
+        for j in range(len(p) - 1, -1, -1):
+            if not p[j] == t[i + j]:
+                skip_bc = p_bm.bad_character_rule(j, t[i + j])
+                skip_gs = p_bm.good_suffix_rule(j)
+                shift = max(skip_bc, skip_gs)
+                mismatched = True
+                break
+        if not mismatched:
+            occurrences.append(i)
+            skip_gs = p_bm.match_skip()
+            shift = max(shift, skip_gs)
+        i = i + shift
+    return occurrences
+
