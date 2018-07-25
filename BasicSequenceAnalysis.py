@@ -40,7 +40,7 @@ def check_match(s_1, s_2):
 
 def reverse_complement(inseq):
     """ Return the reverse complement of a given DNA Sequence.
-    The input is the sequence string. """
+    The input is the sequence string, and the output is a string. """
     complement_dict = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
     rev_comp = ""
     for base in inseq:
@@ -58,5 +58,17 @@ def read_genome(fileloc):
             if not line[0] == ">":
                 genome += line.rstrip()
     return genome
+
+
+def count_bases(in_genome):
+    """ Count the number of occurrences of each base.
+    Can use the python built in collections.counter to 
+    get the individual count of bases in the genome.
+    The output in this case is a Counter Object."""
+    counts = {"A": 0, "C": 0, "G": 0, "T": 0}
+    for base in in_genome:
+        counts[base] += 1
+    print(counts)
+
 
 
