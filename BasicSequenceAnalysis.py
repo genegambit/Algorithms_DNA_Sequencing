@@ -93,4 +93,29 @@ def read_fastq(in_file):
     return seqs, qual
 
 
+def phred33_quality(qual):
+    """ Convert Phred+33 ASCII-encoded character to Quality Score."""
+    return ord(qual) - 33
+
+
+def quality_phred33(quality):
+    """ Convert the Quality Score to Phred+33 ASCII encoded character. """
+    return chr(quality + 33)
+
+
+def get_base_qual_hist(quality_strings):
+    """ Get the histogram of quality Scores. """
+    # The number 50 is approximated based on the
+    # highest quality score in the genome.
+    # Can be changed depending on the input file. 
+    hist = [0] * 50
+    qualities = []
+    for read in quality_strings:
+        for phred in read:
+            qual = phred33_quality(phred)
+            qualities.append(qual)
+            hist[qual] += 1
+    return hist, qualities
+
+
 
